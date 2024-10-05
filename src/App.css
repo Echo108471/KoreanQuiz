@@ -1,0 +1,83 @@
+/* General styles for the app */
+.app-container {
+    font-family: 'Sans-Serif', Arial, Helvetica, sans-serif;
+    background-color: white;
+    color: black;
+    transition: background-color 0.5s ease, color 0.5s ease;
+    padding: 40px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+  
+  /* Correct answer style */
+.app-container.correct {
+    background-color: #28a745;
+    color: white;
+}
+  
+  /* Incorrect answer style */
+.app-container.incorrect {
+    background-color: white;
+    color: black;
+}
+  
+  /* Heading styles */
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+  
+h2 {
+    font-size: 1.75rem;
+    margin-bottom: 20px;
+}
+  
+  /* Button styles */
+.check-button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+  
+  /* Hover and active states for the button */
+.check-button:hover {
+    background-color: #0056b3;
+}
+  
+.check-button:active {
+    transform: scale(0.98);
+}
+  
+  /* Feedback text style */
+p {
+    font-size: 1.25rem;
+    margin-top: 20px;
+    font-weight: bold;
+}
+  
+  /* Styles for the input field */
+.input-area {
+    padding: 20px;
+    border: 1px solid black;
+
+}
+  
+  /* Adding a focus effect */
+.input-area:focus {
+    border-color: #007bff; /* Change border color to blue on focus */
+    outline: none; /* Removes the default focus outline */
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); /* Adds a blue glow */
+}
+  
+  
