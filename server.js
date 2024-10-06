@@ -22,11 +22,9 @@ const PORT = process.env.PORT || 5000;
 
 // CORS configuration: restrict origins in production, allow all in development
 const allowedOrigins = [
-    'https://korean-quiz-red.vercel.app', // existing
-    'http://localhost:3000', // existing
-    'https://korean-quiz-nine.vercel.app' // add this line
+    process.env.FRONTEND_URL || 'http://localhost:3000',
+    'http://localhost:5173', // Add this for local development if you're using Vite
 ];
-
 
 const corsOptions = {
     origin: (origin, callback) => {
