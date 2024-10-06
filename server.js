@@ -2,9 +2,13 @@ import express from 'express';
 import sqlite3 from 'sqlite3';
 import path from 'path';
 import cors from 'cors';
+import dotenv from 'dotenv';
+
+// Load environment variables from .env file
+dotenv.config();
 
 // Initialize the SQLite database
-const db = new sqlite3.Database('./vocabulary.db', (err) => {
+const db = new sqlite3.Database(process.env.DATABASE_PATH || './vocabulary.db', (err) => {
     if (err) {
         console.error('Error opening database: ' + err.message);
         process.exit(1); // Exit the app if the database cannot be opened
@@ -17,7 +21,11 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // CORS configuration: restrict origins in production, allow all in development
-const allowedOrigins = ['https://korean-quiz-red.vercel.app', 'http://localhost:3000'];
+const allowedOrigins = [
+    process.env.FRONTEND_URL || 'http://localhost:3000',
+    'http://localhost:5173', // Add this for local development if you're using Vite
+];
+
 const corsOptions = {
     origin: (origin, callback) => {
         if (!origin || allowedOrigins.includes(origin)) {
@@ -39,6 +47,7 @@ app.use(express.static(path.join(process.cwd(), 'dist')));
 app.get('/api/vocabulary', (req, res) => {
     db.all('SELECT * FROM vocabulary', [], (err, rows) => {
         if (err) {
+            console.error('Error fetching vocabulary: ' + err.message);
             return res.status(500).json({ error: err.message });
         }
         res.json(rows);
@@ -49,6 +58,7 @@ app.get('/api/vocabulary', (req, res) => {
 app.get('/api/vocabulary/random', (req, res) => {
     db.get('SELECT * FROM vocabulary ORDER BY RANDOM() LIMIT 1', (err, row) => {
         if (err) {
+            console.error('Error fetching random word: ' + err.message);
             return res.status(500).json({ error: err.message });
         }
         res.json(row);
