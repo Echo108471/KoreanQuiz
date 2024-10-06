@@ -18,7 +18,7 @@ const App = () => {
 
   const fetchRandomWord = async () => {
     try {
-        const response = await axios.get('http://localhost:5000/api/vocabulary/random');
+        const response = await axios.get('https://koreanquizbackend.onrender.com/api/vocabulary/random');
         console.log('Fetched word:', response.data.english_meaning);
         console.log('Fetched word1:', response.data.korean_word);
         setWord(response.data.english_meaning);
