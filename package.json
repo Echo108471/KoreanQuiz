@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "dev:frontend": "vite",
+    "dev:frontend": "vite", 
     "dev:backend": "nodemon server.js",
     "build": "vite build && npm run build:backend",
     "build:backend": "echo 'Build backend if necessary'",
@@ -16,8 +16,8 @@
   "dependencies": {
     "axios": "^1.7.7",
     "body-parser": "^1.20.3",
+    "concurrently": "^7.5.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "hangul-js": "^0.2.6",
     "mongoose": "^8.7.0",
@@ -30,7 +30,6 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
-    "concurrently": "^9.0.1",
     "eslint": "^9.9.0",
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
