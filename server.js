@@ -13,12 +13,6 @@ app.use(cors());
 app.use(express.json());
 const PORT = process.env.PORT || 5000; // Use the PORT provided by Render
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors());
-
-app.use(express.static(path.join(__dirname, 'dist')));
-
 // Sample database with words generated with AI
 // Not all metadata is used
 db.serialize(() => {
@@ -57,10 +51,6 @@ app.get('/api/vocabulary/random', (req, res) => {
         res.json(row);
     });
 });
-
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-  });
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
