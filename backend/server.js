@@ -11,7 +11,6 @@ const db = new sqlite3.Database('./vocabulary.db', (err) => {
 const app = express();
 app.use(cors());
 app.use(express.json());
-const PORT = process.env.PORT || 5000; // Use the PORT provided by Render
 
 // Sample database with words generated with AI
 // Not all metadata is used
@@ -52,6 +51,6 @@ app.get('/api/vocabulary/random', (req, res) => {
     });
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
+app.listen(5000, () => {
+    console.log('Server running on http://localhost:5000');
+});
