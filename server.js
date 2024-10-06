@@ -1,6 +1,5 @@
 import express from 'express';
 import sqlite3 from 'sqlite3';
-import path from 'path';
 import cors from 'cors';
 
 const db = new sqlite3.Database('./vocabulary.db', (err) => {
