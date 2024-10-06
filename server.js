@@ -24,7 +24,8 @@ const PORT = process.env.PORT || 5000;
 const allowedOrigins = [
     'https://korean-quiz-red.vercel.app', // existing
     'http://localhost:3000', // existing
-    'https://korean-quiz-nine.vercel.app' // add this line
+    'https://korean-quiz-nine.vercel.app',
+    'http://localhost:5000'
 ];
 
 
