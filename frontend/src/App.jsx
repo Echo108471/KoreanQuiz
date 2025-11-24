@@ -33,8 +33,8 @@ const App = () => {
     setIsLoading(true);
     try {
       const url = difficulty === 'all'
-        ? 'http://localhost:5000/api/vocabulary/random'
-        : `http://localhost:5000/api/vocabulary/random?level=${difficulty}`;
+        ? 'https://koreanquizbackend.onrender.com/api/vocabulary/random'
+        : `https://koreanquizbackend.onrender.com/api/vocabulary/random?level=${difficulty}`;
 
       const response = await axios.get(url, { signal });
 
