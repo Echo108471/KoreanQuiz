@@ -3,12 +3,12 @@ import React, { memo } from 'react';
 const InputArea = memo(({ input, correct }) => {
   const getStyles = () => {
     if (correct === true) {
-      return 'border-green-500 bg-green-50 shadow-green-200';
+      return 'border-teal-500 bg-teal-50 shadow-teal-200';
     }
     if (correct === false) {
       return 'border-red-500 bg-red-50 shadow-red-200';
     }
-    return 'border-indigo-300 bg-white shadow-indigo-100';
+    return 'border-cyan-300 bg-white shadow-cyan-100';
   };
 
   return (

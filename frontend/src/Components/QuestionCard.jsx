@@ -27,8 +27,8 @@ const QuestionCard = ({ word, showHint, answer, input, correct, isLoading }) => 
         </AnimatePresence>
 
         {showHint && answer && (
-          <div className="inline-block bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full text-sm font-medium animate-fadeIn">
-            💡 Hint: Starts with "{answer.charAt(0)}"
+          <div className="inline-block bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium animate-fadeIn">
+            Hint: Starts with "{answer.charAt(0)}"
           </div>
         )}
       </div>
@@ -38,8 +38,7 @@ const QuestionCard = ({ word, showHint, answer, input, correct, isLoading }) => 
       {/* Feedback */}
       {correct === true && (
         <div className="mt-6 text-center animate-fadeIn">
-          <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-6 py-3 rounded-full font-bold text-lg">
-            <span className="text-2xl">✓</span>
+          <div className="inline-flex items-center gap-2 bg-teal-100 text-teal-800 px-6 py-3 rounded-full font-bold text-lg">
             <span>Correct!</span>
           </div>
         </div>

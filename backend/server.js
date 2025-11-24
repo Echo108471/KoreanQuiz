@@ -14,7 +14,7 @@ const app = express();
 
 // CORS configuration
 const corsOptions = {
-    origin: ['http://localhost:5173', 'http://localhost:5173/'],
+    origin: ['http://localhost:5173', 'http://localhost:5173/', 'https://koreanquiz.onrender.com'],
     methods: ['GET', 'POST'],
     credentials: true,
 };
@@ -37,7 +37,7 @@ db.serialize(() => {
             console.error('Error creating table:', err);
         } else {
             console.log('Vocabulary table ready');
-            
+
             // Check if table is empty
             db.get('SELECT COUNT(*) as count FROM vocabulary', (err, row) => {
                 if (err) {
@@ -69,7 +69,7 @@ function insertInitialVocabulary() {
         ['하늘', 'Sky', '하늘이 파래요.', 'Beginner'],
         ['바다', 'Sea', '여름에 바다에 가요.', 'Beginner'],
         ['산', 'Mountain', '주말에 산에 올라가요.', 'Beginner'],
-        
+
         // Intermediate Level
         ['여행', 'Travel', '여행은 나의 취미입니다.', 'Intermediate'],
         ['영화', 'Movie', '어제 좋은 영화를 봤어요.', 'Intermediate'],
@@ -86,7 +86,7 @@ function insertInitialVocabulary() {
         ['기회', 'Opportunity', '좋은 기회예요.', 'Intermediate'],
         ['경험', 'Experience', '좋은 경험이었어요.', 'Intermediate'],
         ['노력', 'Effort', '노력하면 성공해요.', 'Intermediate'],
-        
+
         // Advanced Level
         ['환경', 'Environment', '환경 보호가 중요합니다.', 'Advanced'],
         ['경제', 'Economy', '경제가 어려워요.', 'Advanced'],
@@ -101,7 +101,7 @@ function insertInitialVocabulary() {
     ];
 
     const stmt = db.prepare('INSERT INTO vocabulary (korean_word, english_meaning, example_sentence, level) VALUES (?, ?, ?, ?)');
-    
+
     vocabulary.forEach(item => {
         stmt.run(item, (err) => {
             if (err) {
@@ -109,7 +109,7 @@ function insertInitialVocabulary() {
             }
         });
     });
-    
+
     stmt.finalize(() => {
         console.log('Initial vocabulary inserted successfully');
     });
@@ -130,14 +130,14 @@ app.get('/api/vocabulary/random', (req, res) => {
     const level = req.query.level;
     let query = 'SELECT * FROM vocabulary';
     let params = [];
-    
+
     if (level && level !== 'all') {
         query += ' WHERE level = ?';
         params = [level];
     }
-    
+
     query += ' ORDER BY RANDOM() LIMIT 1';
-    
+
     db.get(query, params, (err, row) => {
         if (err) {
             return res.status(500).json({ error: err.message });

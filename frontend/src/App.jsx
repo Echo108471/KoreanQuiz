@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import Header from './Components/Header';
 import QuestionCard from './Components/QuestionCard';
 import Keyboard from './Components/Keyboard';
-import ActionButtons from './Components/ActionButtons';
 import Hangul from 'hangul-js';
 import axios from 'axios';
 
@@ -156,7 +155,7 @@ const App = () => {
   const accuracy = totalAttempts > 0 ? ((score / totalAttempts) * 100).toFixed(1) : 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-cyan-50">
       <Header
         difficulty={difficulty}
         setDifficulty={setDifficultyCallback}
@@ -180,18 +179,13 @@ const App = () => {
 
           {/* Keyboard */}
           <div className="mb-6">
-            <Keyboard onKeyPress={handleKeyPress} />
+            <Keyboard
+              onKeyPress={handleKeyPress}
+              onHint={getHint}
+              onSkip={skipWord}
+              showHint={showHint}
+            />
           </div>
-
-          <ActionButtons
-            checkWord={checkWord}
-            getHint={getHint}
-            skipWord={skipWord}
-            correct={correct}
-            showHint={showHint}
-            inputTrimmed={!!input.trim()}
-            isLoading={isLoading}
-          />
         </div>
       </div>
     </div>
