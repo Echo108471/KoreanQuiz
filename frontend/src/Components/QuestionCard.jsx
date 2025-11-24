@@ -4,7 +4,7 @@ import InputArea from './InputArea';
 
 const QuestionCard = ({ word, showHint, answer, input, correct, isLoading }) => {
   return (
-    <div className="bg-white rounded-3xl shadow-2xl p-8 mb-6 border border-gray-100 relative overflow-hidden">
+    <div className="bg-white rounded-3xl shadow-lg p-8 mb-6 border border-gray-100 relative overflow-hidden">
       {isLoading && (
         <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex items-center justify-center">
           <div className="animate-spin rounded-full h-12 w-12 border-4 border-indigo-600 border-t-transparent"></div>
