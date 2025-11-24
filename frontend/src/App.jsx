@@ -1,6 +1,8 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import InputArea from './Components/InputArea';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import Header from './Components/Header';
+import QuestionCard from './Components/QuestionCard';
 import Keyboard from './Components/Keyboard';
+import ActionButtons from './Components/ActionButtons';
 import Hangul from 'hangul-js';
 import axios from 'axios';
 
@@ -16,15 +18,100 @@ const App = () => {
   const [difficulty, setDifficulty] = useState('all');
   const [isLoading, setIsLoading] = useState(false);
 
+  const abortControllerRef = useRef(null);
+
+  const fetchRandomWord = useCallback(async () => {
+    // Cancel previous request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    // Create new controller
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+    const signal = controller.signal;
+
+    setIsLoading(true);
+    try {
+      const url = difficulty === 'all'
+        ? 'http://localhost:5000/api/vocabulary/random'
+        : `http://localhost:5000/api/vocabulary/random?level=${difficulty}`;
+
+      const response = await axios.get(url, { signal });
+
+      console.log('Fetched word:', response.data.english_meaning);
+      console.log('Fetched word1:', response.data.korean_word);
+      setWord(response.data.english_meaning);
+      setAnswer(response.data.korean_word);
+      setCorrect(null);
+      setInput('');
+      setShowHint(false);
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        console.log('Request canceled:', error.message);
+      } else {
+        console.error('Error fetching the word:', error);
+      }
+    } finally {
+      // Only update loading state if this is still the active request
+      if (abortControllerRef.current === controller) {
+        setIsLoading(false);
+      }
+    }
+  }, [difficulty]);
+
   useEffect(() => {
     fetchRandomWord();
-  }, [difficulty]);
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, [fetchRandomWord]);
+
+  const checkWord = useCallback(() => {
+    if (!input.trim()) return;
+
+    setTotalAttempts(prev => prev + 1);
+
+    if (input === answer) {
+      setCorrect(true);
+      setScore(prev => prev + 1);
+      setStreak(prev => prev + 1);
+      console.log('Correct Answer:', answer);
+
+      // Auto-advance to next word after 1.5 seconds
+      setTimeout(() => {
+        fetchRandomWord();
+      }, 1500);
+    } else {
+      setCorrect(false);
+      setStreak(0);
+      console.log('Incorrect Answer');
+    }
+  }, [input, answer, fetchRandomWord]);
+
+  const handleKeyPress = useCallback((key) => {
+    if (correct === true) return; // Prevent typing after correct answer
+
+    if (key === 'Backspace') {
+      const disassembled = Hangul.disassemble(input);
+      const updatedDisassembled = disassembled.slice(0, -1);
+      const combined = Hangul.assemble(updatedDisassembled);
+      setInput(combined);
+    } else if (key === 'Enter') {
+      checkWord();
+    } else {
+      const combined = Hangul.assemble([...Hangul.disassemble(input), key]);
+      setInput(combined);
+    }
+  }, [input, correct, checkWord]);
 
   // Physical keyboard support
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (correct === true) return;
-      
+
       // Map physical keyboard to Korean characters
       const keyMap = {
         'q': 'ㅂ', 'w': 'ㅈ', 'e': 'ㄷ', 'r': 'ㄱ', 't': 'ㅅ',
@@ -36,7 +123,7 @@ const App = () => {
         'Q': 'ㅃ', 'W': 'ㅉ', 'E': 'ㄸ', 'R': 'ㄲ', 'T': 'ㅆ',
         'O': 'ㅒ', 'P': 'ㅖ'
       };
-      
+
       if (e.key === 'Enter') {
         e.preventDefault();
         handleKeyPress('Enter');
@@ -51,171 +138,62 @@ const App = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [input, correct]);
+  }, [handleKeyPress, correct]);
 
-  const fetchRandomWord = async () => {
-    setIsLoading(true);
-    try {
-        const url = difficulty === 'all' 
-          ? 'http://localhost:5000/api/vocabulary/random'
-          : `http://localhost:5000/api/vocabulary/random?level=${difficulty}`;
-        const response = await axios.get(url);
-        console.log('Fetched word:', response.data.english_meaning);
-        console.log('Fetched word1:', response.data.korean_word);
-        setWord(response.data.english_meaning);
-        setAnswer(response.data.korean_word);
-        setCorrect(null);
-        setInput('');
-        setShowHint(false);
-    } catch (error) {
-        console.error('Error fetching the word:', error);
-    } finally {
-        setIsLoading(false);
-    }
-  };
-
-  const handleKeyPress = useCallback((key) => {
-    if (correct === true) return; // Prevent typing after correct answer
-    
-    if (key === 'Backspace') {
-      const disassembled = Hangul.disassemble(input);
-      const updatedDisassembled = disassembled.slice(0, -1);
-      const combined = Hangul.assemble(updatedDisassembled);
-      setInput(combined);
-    } else if (key === 'Enter') {
-      checkWord();
-    } else {
-      const combined = Hangul.assemble([...Hangul.disassemble(input), key]);
-      setInput(combined);
-    }
-  }, [input, correct]);
-
-  const checkWord = () => {
-    if (!input.trim()) return;
-    
-    setTotalAttempts(prev => prev + 1);
-    
-    if (input === answer) {
-      setCorrect(true);
-      setScore(prev => prev + 1);
-      setStreak(prev => prev + 1);
-      console.log('Correct Answer:', answer);
-      
-      // Auto-advance to next word after 1.5 seconds
-      setTimeout(() => {
-        fetchRandomWord();
-      }, 1500);
-    } else {
-      setCorrect(false);
-      setStreak(0);
-      console.log('Incorrect Answer');
-    }
-  };
-
-  const skipWord = () => {
+  const skipWord = useCallback(() => {
     setStreak(0);
     fetchRandomWord();
-  };
+  }, [fetchRandomWord]);
 
-  const getHint = () => {
+  const getHint = useCallback(() => {
     setShowHint(true);
-  };
+  }, []);
+
+  const setDifficultyCallback = useCallback((newDifficulty) => {
+    setDifficulty(newDifficulty);
+  }, []);
 
   const accuracy = totalAttempts > 0 ? ((score / totalAttempts) * 100).toFixed(1) : 0;
 
-  const bgColor = correct === true 
-    ? 'bg-green-500' 
-    : correct === false 
-    ? 'bg-red-500' 
-    : 'bg-white';
-  
-  const textColor = correct !== null ? 'text-white' : 'text-black';
-
   return (
-    <div className={`${bgColor} ${textColor} transition-all duration-500 min-h-screen p-5 text-center`}>
-      {/* Stats Container */}
-      <div className="flex justify-center gap-8 mb-5 flex-wrap">
-        <div className="flex flex-col items-center">
-          <span className="text-sm font-bold mb-1">Score:</span>
-          <span className="text-2xl font-bold">{score}</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <span className="text-sm font-bold mb-1">Streak:</span>
-          <span className="text-2xl font-bold">{streak} 🔥</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <span className="text-sm font-bold mb-1">Accuracy:</span>
-          <span className="text-2xl font-bold">{accuracy}%</span>
-        </div>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+      <Header
+        difficulty={difficulty}
+        setDifficulty={setDifficultyCallback}
+        score={score}
+        streak={streak}
+        accuracy={accuracy}
+        disabled={correct === true}
+      />
 
-      <h1 className="text-4xl font-bold mb-5">Korean Vocabulary Quiz</h1>
-      
-      {/* Difficulty Selector */}
-      <div className="mb-5">
-        <label className="text-base font-bold mr-2">Difficulty: </label>
-        <select 
-          value={difficulty} 
-          onChange={(e) => setDifficulty(e.target.value)}
-          className="px-4 py-2 text-base rounded border-2 border-blue-500 cursor-pointer text-black"
-          disabled={correct === true}
-        >
-          <option value="all">All Levels</option>
-          <option value="Beginner">Beginner</option>
-          <option value="Intermediate">Intermediate</option>
-          <option value="Advanced">Advanced</option>
-        </select>
-      </div>
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-5xl mx-auto">
+          <QuestionCard
+            word={word}
+            showHint={showHint}
+            answer={answer}
+            input={input}
+            correct={correct}
+            isLoading={isLoading}
+          />
 
-      {isLoading ? (
-        <p className="text-xl">Loading...</p>
-      ) : (
-        <>
-          <h2 className="text-3xl font-semibold mb-5">Translate: {word}</h2>
-          {showHint && answer && (
-            <p className="text-lg italic text-yellow-400 mt-2">
-              Hint: Starts with "{answer.charAt(0)}"
-            </p>
-          )}
-          <InputArea input={input} correct={correct} />
-          <br />
-          <Keyboard onKeyPress={handleKeyPress} />
-          
-          {/* Action Buttons */}
-          <div className="flex justify-center gap-4 mt-5 flex-wrap">
-            <button 
-              onClick={checkWord} 
-              className="px-5 py-2.5 text-lg text-white bg-blue-500 border-none rounded cursor-pointer font-bold transition-all hover:bg-blue-600 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
-              disabled={correct === true || !input.trim()}
-            >
-              Check Answer
-            </button>
-            <button 
-              onClick={getHint} 
-              className="px-5 py-2.5 text-lg text-black bg-yellow-400 border-none rounded cursor-pointer font-bold transition-all hover:bg-yellow-500 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
-              disabled={correct === true || showHint}
-            >
-              Get Hint
-            </button>
-            <button 
-              onClick={skipWord} 
-              className="px-5 py-2.5 text-lg text-white bg-gray-600 border-none rounded cursor-pointer font-bold transition-all hover:bg-gray-700 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
-              disabled={correct === true}
-            >
-              Skip
-            </button>
+          {/* Keyboard */}
+          <div className="mb-6">
+            <Keyboard onKeyPress={handleKeyPress} />
           </div>
-          
-          {correct === true && (
-            <p className="text-2xl font-bold mt-5 animate-fadeIn">✅ Correct!</p>
-          )}
-          {correct === false && (
-            <p className="text-2xl font-bold mt-5 animate-fadeIn">
-              ❌ Incorrect! The answer is: {answer}
-            </p>
-          )}
-        </>
-      )}
+
+          <ActionButtons
+            checkWord={checkWord}
+            getHint={getHint}
+            skipWord={skipWord}
+            correct={correct}
+            showHint={showHint}
+            inputTrimmed={!!input.trim()}
+            isLoading={isLoading}
+          />
+        </div>
+      </div>
     </div>
   );
 };
