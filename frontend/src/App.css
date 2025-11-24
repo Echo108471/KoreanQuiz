@@ -1,0 +1,154 @@
+/* General styles for the app */
+.app-container {
+    font-family: 'Segoe UI', 'Sans-Serif', Arial, Helvetica, sans-serif;
+    background-color: white;
+    color: black;
+    transition: background-color 0.5s ease, color 0.5s ease;
+    padding: 40px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+  
+/* Correct answer style */
+.app-container.correct {
+    background-color: #28a745;
+    color: white;
+}
+  
+/* Incorrect answer style */
+.app-container.incorrect {
+    background-color: #dc3545;
+    color: white;
+}
+  
+/* Heading styles */
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+  
+h2 {
+    font-size: 1.75rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+  
+/* Button styles */
+.check-button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+  
+/* Hover and active states for the button */
+.check-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+  
+.check-button:active {
+    transform: scale(0.98);
+}
+
+.check-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+  
+/* Feedback text style */
+p {
+    font-size: 1.25rem;
+    margin-top: 20px;
+    font-weight: bold;
+}
+  
+/* Styles for the input field */
+.input-area {
+    padding: 20px;
+    border: 2px solid #007bff;
+    border-radius: 10px;
+    min-height: 60px;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+  
+/* Adding a focus effect */
+.input-area:focus {
+    border-color: #0056b3;
+    outline: none;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.fadeIn {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.pulse {
+    animation: pulse 0.6s ease-in-out;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    .app-container {
+        padding: 20px;
+    }
+}
+
+/* Virtual keyboard button hover effects */
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
