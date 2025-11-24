@@ -32,9 +32,10 @@ const App = () => {
 
     setIsLoading(true);
     try {
+      const API_URL = import.meta.env.VITE_API_URL || 'https://koreanquizbackend.onrender.com';
       const url = difficulty === 'all'
-        ? 'https://koreanquizbackend.onrender.com/api/vocabulary/random'
-        : `https://koreanquizbackend.onrender.com/api/vocabulary/random?level=${difficulty}`;
+        ? `${API_URL}/api/vocabulary/random`
+        : `${API_URL}/api/vocabulary/random?level=${difficulty}`;
 
       const response = await axios.get(url, { signal });
 
