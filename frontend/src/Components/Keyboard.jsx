@@ -6,7 +6,7 @@ const vowels = ['ㅏ', 'ㅑ', 'ㅓ', 'ㅕ', 'ㅗ', 'ㅛ', 'ㅜ', 'ㅠ', 'ㅡ', '
 const Keyboard = memo(({ onKeyPress, onHint, onSkip, showHint }) => {
   return (
     <div className="bg-white rounded-3xl shadow-2xl p-6 border border-gray-100">
-      <div className="flex gap-6">
+      <div className="flex flex-col md:flex-row gap-6">
         {/* Consonants */}
         <div className="flex-1">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3 text-center">Consonants (자음)</p>
@@ -46,8 +46,8 @@ const Keyboard = memo(({ onKeyPress, onHint, onSkip, showHint }) => {
           onClick={onHint}
           disabled={showHint}
           className={`flex-1 max-w-[140px] px-4 py-3 text-base border-0 rounded-xl cursor-pointer font-bold transition-all shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 ${showHint
-              ? 'bg-gray-100 text-gray-400 cursor-not-allowed shadow-none'
-              : 'bg-gradient-to-r from-amber-400 to-amber-500 text-white hover:from-amber-500 hover:to-amber-600'
+            ? 'bg-gray-100 text-gray-400 cursor-not-allowed shadow-none'
+            : 'bg-gradient-to-r from-amber-400 to-amber-500 text-white hover:from-amber-500 hover:to-amber-600'
             }`}
         >
           Hint

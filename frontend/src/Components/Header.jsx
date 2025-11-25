@@ -16,9 +16,9 @@ const Header = memo(({ difficulty, setDifficulty, score, streak, accuracy, disab
     <div className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10">
       <div className="container mx-auto px-4 py-4">
         <div className="max-w-5xl mx-auto">
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0">
             {/* Title */}
-            <div>
+            <div className="text-center md:text-left">
               <h1 className="text-3xl font-extrabold bg-gradient-to-r from-slate-700 to-cyan-600 bg-clip-text text-transparent">
                 Korean Quiz
               </h1>
@@ -26,8 +26,8 @@ const Header = memo(({ difficulty, setDifficulty, score, streak, accuracy, disab
             </div>
 
             {/* Difficulty Selector */}
-            <div className="flex-1 flex justify-center mx-8">
-              <div className="bg-gray-100 rounded-full p-1 inline-flex relative w-[500px]">
+            <div className="w-full md:flex-1 flex justify-center md:mx-8 order-3 md:order-2">
+              <div className="bg-gray-100 rounded-full p-1 inline-flex relative w-full max-w-[500px]">
                 <motion.div
                   className="absolute bg-gradient-to-r from-slate-700 to-cyan-600 rounded-full shadow-lg"
                   initial={false}
@@ -47,7 +47,7 @@ const Header = memo(({ difficulty, setDifficulty, score, streak, accuracy, disab
                     key={level}
                     onClick={() => setDifficulty(level)}
                     disabled={disabled}
-                    className={`flex-1 py-2 rounded-full font-semibold text-sm transition-colors relative z-10 ${difficulty === level
+                    className={`flex-1 py-2 rounded-full font-semibold text-xs md:text-sm transition-colors relative z-10 ${difficulty === level
                       ? 'text-white'
                       : 'text-gray-600 hover:text-gray-900'
                       } disabled:opacity-50 disabled:cursor-not-allowed`}
@@ -59,7 +59,7 @@ const Header = memo(({ difficulty, setDifficulty, score, streak, accuracy, disab
             </div>
 
             {/* Stats */}
-            <div className="flex gap-6">
+            <div className="flex gap-6 order-2 md:order-3 w-full md:w-auto justify-center md:justify-end">
               <div className="text-center">
                 <p className="text-gray-500 text-xs font-medium uppercase tracking-wide mb-1">Score</p>
                 <p className="text-2xl font-bold text-cyan-600">{score}</p>
