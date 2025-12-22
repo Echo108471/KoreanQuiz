@@ -19,8 +19,8 @@ const Header = memo(({ difficulty, setDifficulty, score, streak, accuracy, disab
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0">
             {/* Title */}
             <div className="text-center md:text-left">
-              <h1 className="text-3xl font-extrabold bg-gradient-to-r from-slate-700 to-cyan-600 bg-clip-text text-transparent">
-                Korean Quiz
+              <h1 className="text-3xl font-extrabold bg-gradient-to-r from-slate-700 to-cyan-600 bg-clip-text text-transparent pb-1">
+                HangulStudy
               </h1>
               <p className="text-gray-600 text-xs mt-0.5">Master Korean vocabulary</p>
             </div>
